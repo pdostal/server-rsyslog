@@ -1,0 +1,30 @@
+- name: DNS
+  hosts: all
+  sudo: true
+  handlers:
+  - name: restart service
+    service: name={{ service }} state=restarted
+
+  tasks:
+  - set_fact:
+      service: rsyslogd
+      rsyslog_conf: /usr/local/etc/knot/
+    when: ansible_distribution == 'FreeBSD'
+  - set_fact:
+      service: rsyslog
+      rsyslog_conf: /etc/knot/
+    when: ansible_system == 'Linux'
+
+  - name: Install rsyslog (FreeBSD)
+    when: ansible_distribution == 'FreeBSD'
+    pkgng: name=rsyslog state=present
+  - name: Disable syslogd (FreeBSD)
+    when: ansible_distribution == 'FreeBSD'
+    lineinfile: dest=/etc/rc.conf regexp=^syslogd_enable= line=syslogd_enable=NO
+  - name: Enable rsyslogd (FreeBSD)
+    when: ansible_distribution == 'FreeBSD'
+    lineinfile: dest=/etc/rc.conf regexp=^rsyslogd_enable= line=rsyslogd_enable=YES
+
+  - name: Paste rsyslog.conf
+    template: src=templates/{{ inventory_hostname }}.conf dest={{ rsyslog_conf }}rsyslog.conf
+    notify: restart service
