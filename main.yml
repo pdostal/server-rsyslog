@@ -8,11 +8,11 @@
   tasks:
   - set_fact:
       service: rsyslogd
-      rsyslog_conf: /usr/local/etc/knot/
+      rsyslog_conf: /usr/local/etc/
     when: ansible_distribution == 'FreeBSD'
   - set_fact:
       service: rsyslog
-      rsyslog_conf: /etc/knot/
+      rsyslog_conf: /etc/
     when: ansible_system == 'Linux'
 
   - name: Install rsyslog (FreeBSD)
@@ -24,6 +24,15 @@
   - name: Enable rsyslogd (FreeBSD)
     when: ansible_distribution == 'FreeBSD'
     lineinfile: dest=/etc/rc.conf regexp=^rsyslogd_enable= line=rsyslogd_enable=YES
+
+  - name: Creates openvpn directory
+    when: ansible_fqdn in groups.server
+    file: >
+      path=/var/log/remotes
+      state=directory
+      owner=root
+      group=root
+      mode=0774
 
   - name: Paste rsyslog.conf
     template: src=templates/{{ inventory_hostname }}.conf dest={{ rsyslog_conf }}rsyslog.conf

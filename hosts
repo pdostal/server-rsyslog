@@ -1,3 +1,7 @@
+[all]
 cucumber
 rhubarb
 sorrel
+
+[server]
+cucumber
