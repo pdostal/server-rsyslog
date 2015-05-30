@@ -25,7 +25,7 @@
     when: ansible_distribution == 'FreeBSD'
     lineinfile: dest=/etc/rc.conf regexp=^rsyslogd_enable= line=rsyslogd_enable=YES
 
-  - name: Creates openvpn directory
+  - name: Creates remotes/ directory
     when: ansible_fqdn in groups.server
     file: >
       path=/var/log/remotes
