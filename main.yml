@@ -32,7 +32,7 @@
       state=directory
       owner=root
       group=root
-      mode=0774
+      mode=0775
 
   - name: Paste rsyslog.conf
     template: src=templates/{{ inventory_hostname }}.conf dest={{ rsyslog_conf }}rsyslog.conf
