@@ -21,6 +21,9 @@
   - name: Disable syslogd (FreeBSD)
     when: ansible_distribution == 'FreeBSD'
     lineinfile: dest=/etc/rc.conf regexp=^syslogd_enable= line=syslogd_enable=NO
+  - name: Disable newsyslogd (FreeBSD)
+    when: ansible_distribution == 'FreeBSD'
+    lineinfile: dest=/etc/rc.conf regexp=^newsyslogd_enable= line=newsyslogd_enable=NO
   - name: Stop syslogd service
     service: name=syslogd state=stopped
   - name: Enable rsyslogd (FreeBSD)
