@@ -24,6 +24,9 @@
   - name: Disable newsyslogd (FreeBSD)
     when: ansible_distribution == 'FreeBSD'
     lineinfile: dest=/etc/rc.conf regexp=^newsyslog_enable= line=newsyslog_enable=NO
+  - name: Disable newsyslogd (FreeBSD)
+    when: ansible_distribution == 'FreeBSD'
+    shell: "sed -i .bak -e '/^0.*newsyslog/ s/^0/#0/' /etc/crontab"
   - name: Stop syslogd service
     service: name=syslogd state=stopped
   - name: Enable rsyslogd (FreeBSD)
